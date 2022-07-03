@@ -40,6 +40,7 @@ public class HTTPRestClient implements RestClient {
     public HttpResponse<String> Submit(String endpoint, Message msg) throws InterruptedException, IOException {
         String jsonString = JsonFormat.printer()
                 .preservingProtoFieldNames()
+                .omittingInsignificantWhitespace()
                 .print(msg);
 
         System.out.println(jsonString);
@@ -48,6 +49,7 @@ public class HTTPRestClient implements RestClient {
             .POST(HttpRequest.BodyPublishers.ofString(jsonString))
             .headers("Accept", "application/json", "TxTimeout", txTimeout.toSeconds() + "s")
             .build();
+
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());

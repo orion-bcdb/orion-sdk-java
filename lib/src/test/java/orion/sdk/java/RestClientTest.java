@@ -61,6 +61,7 @@ class HTTPRestClientTest {
 
             String jsonString = JsonFormat.printer()
                 .preservingProtoFieldNames()
+                .omittingInsignificantWhitespace()
                 .print(txPayload);
 
             var sig = signer.Sign(jsonString.getBytes());
