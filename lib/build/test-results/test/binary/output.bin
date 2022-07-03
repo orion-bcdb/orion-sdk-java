@@ -1,0 +1,20 @@
+&Could not reconstruct the private key
+{
+  "payload": {
+%    "must_sign_user_ids": ["admin"],
+    "tx_id": "tx1",
+    "db_operations": [{
+      "db_name": "bdb",
+      "data_writes": [{
+        "key": "key1"
+	      }]
+    }]
+  },
+  "signatures": {
+    "admin": ""
+  }
+}
+*{"error":"signature verification failed"}
+)(POST http://127.0.0.1:6001/data/tx) 401
+*{"error":"signature verification failed"}
+'(GET http://127.0.0.1:6001/db/bdb) 401
