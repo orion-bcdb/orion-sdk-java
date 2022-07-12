@@ -12,10 +12,6 @@ public class CommonTxContext implements TxContext {
     String userID;
     String txID;
     Replica[] replicas;
-    Message txEnvelope;
-    Duration commitTimeout;
-    Duration queryTimeout;
-    boolean txSpent;
 
 	// Commit submits transaction to the server, can be sync or async.
 	// Sync option returns tx id and tx receipt envelope and

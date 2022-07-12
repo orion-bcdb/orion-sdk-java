@@ -1,18 +1,33 @@
 package org.hyperledger.orion.sdk;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.security.PrivateKey;
 import java.time.Duration;
 
 import org.hyperledger.orion.sdk.config.Replica;
+import org.hyperledger.orion.sdk.config.SessionConfig;
+import org.hyperledger.orion.sdk.security.CryptoPrimitives;
 
 public class Session implements DBSession {
     String userID;
+    PrivateKey privateKey;
+    CryptoPrimitives crypto;
     Replica[] replicas;
+    Duration queryTimeout;
     Duration txTimeout;
 
-    public Session(String userID, Replica[] replicas, Duration txTimeout) {
-        this.userID = userID;
+    public Session(SessionConfig sConfig, Replica[] replicas, CryptoPrimitives crypto) throws Exception {
+        this.userID = sConfig.getUserConfig().getUserID();
         this.replicas = replicas;
-        this.txTimeout = txTimeout;
+        this.crypto = crypto;
+        this.queryTimeout = sConfig.getQueryTimeout();
+        this.txTimeout = sConfig.getTxTimeout();
+
+        File f = new File(sConfig.getUserConfig().getPrivateKeyPath());
+        var key = Files.readAllBytes(f.toPath());
+        this.privateKey = crypto.bytesToPrivateKey(key);
+
     }
 
     public DataTxContext createDataTx() {

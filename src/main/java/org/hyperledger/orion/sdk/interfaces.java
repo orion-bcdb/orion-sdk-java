@@ -2,7 +2,6 @@ package org.hyperledger.orion.sdk;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
-import java.time.Duration;
 
 import com.google.protobuf.Message;
 
@@ -32,9 +31,9 @@ interface DBSession {
 
 interface DataTxContext extends TxContext {
 	// Put new value to key
-    void put(String dbName, String key, byte[] value, AccessControl acl);
+    void put(String dbName, String key, byte[] value, AccessControl acl) throws Exception;
 	// Get existing key value
-    ValueWithMetadata get(String dbName, String key);
+    ValueWithMetadata get(String dbName, String key) throws Exception;
 	// Delete value for key
     void delete(String dbName, String key);
 }
