@@ -2,13 +2,16 @@ package org.hyperledger.orion.sdk;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 
 import com.google.protobuf.Message;
 
 import org.hyperledger.orion.sdk.config.SessionConfig;
 import types.BlockAndTransaction.AccessControl;
+import types.BlockAndTransaction.IndexAttributeType;
 import types.BlockAndTransaction.KVWithMetadata;
 import types.BlockAndTransaction.ValueWithMetadata;
+import types.Configuration.User;
 import types.Response.TxReceiptResponseEnvelope;
 
 // BCDB Blockchain Database interface, defines set of APIs
@@ -19,9 +22,10 @@ interface BCDB {
 }
 
 interface DBSession {
-    // UserTxContext createUserTx() throws Exception;
     DataTxContext createDataTx() throws Exception;
-    // DBsTxContex createDBsTx() throws Exception;
+    DataTxContext createDataTx(String txID) throws Exception;
+    DBsTxContex createDBsTx() throws Exception;
+    // UsersTxContext createUserTx() throws Exception;
     // ConfigTxContext createConfigTx() throws Exception;
     // Provenance provenance() throws Exception;
     // Ledger ledger() throws Exception;
@@ -29,14 +33,6 @@ interface DBSession {
     // Replica[] replicaSet(boolean refresh) throws Exception;
 }
 
-interface DataTxContext extends TxContext {
-	// Put new value to key
-    void put(String dbName, String key, byte[] value, AccessControl acl) throws Exception;
-	// Get existing key value
-    ValueWithMetadata get(String dbName, String key) throws Exception;
-	// Delete value for key
-    void delete(String dbName, String key);
-}
 
 // TxContext is an abstract API to capture general purpose functionality for all types of transactions context.
 interface TxContext {
@@ -52,7 +48,50 @@ interface TxContext {
     Message committedTxEnvelope() throws Exception;
 }
 
+interface DataTxContext extends TxContext {
+	// Put new value to key
+    void put(String dbName, String key, byte[] value, AccessControl acl) throws Exception;
+	// Get existing key value
+    ValueWithMetadata get(String dbName, String key) throws Exception;
+	// Delete value for key
+    void delete(String dbName, String key);
+}
 
+// UsersTxContext transaction context to operate with
+// user management related transactions:
+// 1. Add user's record
+// 2. Get user's record
+// 3. Delete user's record
+// 4. Alternate user's ACLs
+interface UsersTxContext extends TxContext {
+	// PutUser introduce new user into database
+	void putUser(User user, AccessControl acl) throws Exception;
+	// GetUser obtain user's record from database
+	User getUser(String userID) throws Exception;
+	// RemoveUser delete existing user from the database
+	void removeUser(String userID) throws Exception;
+}
+
+interface DBsTxContex extends TxContext {
+	// createDB creates new database along with index definition for the query.
+	// The index is a map of attributes/fields in json document, i.e., value associated
+	// with the key, to its value type. For example, map["name"]types.IndexAttributeType_STRING
+	// denotes that "name" attribute in all json documents to be stored in the given
+	// database to be indexed for queries. Note that only indexed attributes can be
+	// used as predicates in the query string. Currently, we support the following three
+	// value types: STRING, BOOLEAN, and INT64
+    void createDB(String dbName, HashMap<String, IndexAttributeType> index) throws Exception;
+	// deleteDB deletes database
+    void deleteDB(String dbName) throws Exception;
+	// exists checks whenever database is already created
+    boolean exists(String dbName) throws Exception;
+	// getDBIndex returns the index definition associated with the given database.
+	// The index definition is of form map["name"]types.IndexAttributeType where
+	// name denotes the field name in the JSON document and types.IndexAttributeType
+	// denotes one of the three value types: STRING, BOOLEAN, and INT64. When a database
+	// does not have an index definition, GetDBIndex would return a nil map
+    HashMap<String, IndexAttributeType> getDBIndex(String dbName) throws Exception;
+}
 
 // Query provides method to execute json query and range query on a
 // given database.

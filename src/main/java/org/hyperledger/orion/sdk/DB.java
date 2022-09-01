@@ -1,6 +1,7 @@
 package org.hyperledger.orion.sdk;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.hyperledger.orion.sdk.config.ConnectionConfig;
@@ -12,7 +13,7 @@ import org.hyperledger.orion.sdk.security.CryptoPrimitives;
 public class DB implements BCDB {
     ConnectionConfig cConfig;
     CryptoPrimitives crypto;
-    Map<String, URL> bootstrapReplica;
+    Map<String, URL> bootstrapReplica = new HashMap<String, URL>();
 
     public DB(ConnectionConfig cConfig) throws Exception {
         this.cConfig = cConfig;

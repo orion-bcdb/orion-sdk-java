@@ -11,6 +11,12 @@ public class DBOperations {
     HashMap<String, DataWrite> dataWrites;
     HashMap<String, DataDelete> dataDeletes;
 
+    public DBOperations() {
+        this.dataReads = new HashMap<String, GetDataResponse>();
+        this.dataWrites = new HashMap<String, DataWrite>();
+        this.dataDeletes = new HashMap<String, DataDelete>();
+    }
+
     public void setDataRead(String key, GetDataResponse dataRead) {
         dataReads.put(key, dataRead);
     }

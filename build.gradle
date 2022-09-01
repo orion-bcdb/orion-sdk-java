@@ -36,6 +36,7 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-1.2-api:2.17.1'
     implementation 'commons-logging:commons-logging:1.1.1'
     implementation 'commons-io:commons-io:2.6'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.8'
 }
 
 tasks.named('test') {
