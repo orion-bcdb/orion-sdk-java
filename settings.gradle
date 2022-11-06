@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'orion-sdk-java'
-include('lib')
+include('orion-sdk-java')

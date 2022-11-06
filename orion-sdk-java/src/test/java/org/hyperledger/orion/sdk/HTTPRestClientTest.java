@@ -31,7 +31,7 @@ class HTTPRestClientTest {
         try {
         c = new CryptoPrimitives();
         c.init();
-        var adminKeyFilePath = "/Users/senthil/projects/github.ibm.com/orion-sdk-java/src/test/resources/crypto/admin/admin.key";
+        var adminKeyFilePath = "src/test/resources/crypto/admin/admin.key";
 
         File file = new File(adminKeyFilePath);
         var key = Files.readAllBytes(file.toPath());

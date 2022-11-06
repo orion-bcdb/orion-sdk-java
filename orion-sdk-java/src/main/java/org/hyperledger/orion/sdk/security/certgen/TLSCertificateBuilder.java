@@ -13,7 +13,7 @@
  *  limitations under the License.
  *
  */
-package org.hyperledger.fabric.sdk.security.certgen;
+package org.hyperledger.orion.sdk.security.certgen;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
