@@ -3,10 +3,7 @@ package org.hyperledger.orion.sdk;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.nio.file.Paths;
 import java.time.Duration;
-
-import com.google.protobuf.util.JsonFormat;
 
 import org.hyperledger.orion.sdk.config.ConnectionConfig;
 import org.hyperledger.orion.sdk.config.Replica;
@@ -16,6 +13,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+
+import com.google.protobuf.util.JsonFormat;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class DBsTxTest {
