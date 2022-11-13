@@ -25,7 +25,7 @@ interface DBSession {
     DataTxContext createDataTx() throws Exception;
     DataTxContext createDataTx(String txID) throws Exception;
     DBsTxContex createDBsTx() throws Exception;
-    // UsersTxContext createUserTx() throws Exception;
+    UsersTxContext createUsersTx() throws Exception;
     // ConfigTxContext createConfigTx() throws Exception;
     // Provenance provenance() throws Exception;
     // Ledger ledger() throws Exception;
