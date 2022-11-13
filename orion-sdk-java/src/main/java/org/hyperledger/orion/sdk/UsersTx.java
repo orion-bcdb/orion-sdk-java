@@ -19,7 +19,7 @@ import types.Query.GetUserQuery;
 import types.Response.GetUserResponseEnvelope;
 import types.Response.TxReceiptResponseEnvelope;
 
-public class UserTx implements UsersTxContext {
+public class UsersTx implements UsersTxContext {
     CommonTxContext cTxContext;
     ArrayList<UserRead> userReads = new ArrayList<UserRead>();
     ArrayList<UserWrite> userWrites = new ArrayList<UserWrite>();
@@ -27,7 +27,7 @@ public class UserTx implements UsersTxContext {
     UserAdministrationTxEnvelope envelope;
     boolean txSpent;
 
-    public UserTx(CommonTxContext cTxContext) {
+    public UsersTx(CommonTxContext cTxContext) {
         this.cTxContext = cTxContext;
     }
 
@@ -40,7 +40,9 @@ public class UserTx implements UsersTxContext {
 
         UserWrite.Builder uw = UserWrite.newBuilder();
         uw.setUser(user);
-        uw.setAcl(acl);
+        if (acl != null) {
+            uw.setAcl(acl);
+        }
         userWrites.add(uw.build());
     }
 
@@ -67,8 +69,10 @@ public class UserTx implements UsersTxContext {
 
         var userResp = resp.build().getResponse();
         UserRead.Builder ur = UserRead.newBuilder();
-        ur.setUserId(userResp.getUser().getId());
-        ur.setVersion(userResp.getMetadata().getVersion());
+        ur.setUserId(userID);
+        if (userResp.getMetadata().hasVersion()) {
+            ur.setVersion(userResp.getMetadata().getVersion());
+        }
 
         userReads.add(ur.build());
 
@@ -108,9 +112,9 @@ public class UserTx implements UsersTxContext {
         txEnvelope.setPayload(txPayload);
 
         String jsonString = JsonFormat.printer()
-            .preservingProtoFieldNames()
-            .omittingInsignificantWhitespace()
-            .print(txPayload);
+                .preservingProtoFieldNames()
+                .omittingInsignificantWhitespace()
+                .print(txPayload);
 
         var sig = cTxContext.crypto.sign(cTxContext.privateKey, jsonString.getBytes());
         txEnvelope.setSignature(ByteString.copyFrom(sig));

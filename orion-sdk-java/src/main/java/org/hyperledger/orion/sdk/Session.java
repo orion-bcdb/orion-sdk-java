@@ -45,6 +45,10 @@ public class Session implements DBSession {
         return new DBsTx(getCommonTxContext());
     }
 
+    public UsersTxContext createUsersTx() throws Exception {
+        return new UsersTx(getCommonTxContext());
+    }
+
     CommonTxContext getCommonTxContext() throws Exception {
         String txID;
         byte[] nonce = new byte[24];
